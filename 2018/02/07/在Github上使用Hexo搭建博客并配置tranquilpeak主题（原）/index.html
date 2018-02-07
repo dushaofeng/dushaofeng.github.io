@@ -1,0 +1,450 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="阿杜的博客">
+    <title>在Github上使用Hexo搭建博客并配置tranquilpeak主题（原） - 阿杜的博客</title>
+    <meta name="author" content="杜少峰">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="该文章将会引导大家使用Hexo搭建私人博客，并配置tranquilpeak主题，最终效果如此，请严格按照以下顺序进行操作。">
+<meta name="keywords" content="Hexo,Github,tranquilpeak,教程">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）">
+<meta property="og:url" content="/2018/02/07/在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）/index.html">
+<meta property="og:site_name" content="阿杜的博客">
+<meta property="og:description" content="该文章将会引导大家使用Hexo搭建私人博客，并配置tranquilpeak主题，最终效果如此，请严格按照以下顺序进行操作。">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-02-07T06:28:32.590Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）">
+<meta name="twitter:description" content="该文章将会引导大家使用Hexo搭建私人博客，并配置tranquilpeak主题，最终效果如此，请严格按照以下顺序进行操作。">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="/assets/images/photo.jpg"/>
+    
+    
+        <meta property="og:image" content="/2018/02/07/在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）/post_head.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="/2018/02/07/在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）/post_head.jpg" />
+    
+    
+        <meta property="og:image" content="/2018/02/07/在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）/post_bg.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="/2018/02/07/在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）/post_bg.jpg" />
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-pz4cc6y13wt2trzqa8l3n9v0yykr0sstdaheem7qj628nhjmhp9pfawvqawz.min.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">阿杜的博客</a>
+    </div>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/photo.jpg" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/photo.jpg" alt="作者的图片"/>
+                </a>
+                <h4 class="sidebar-profile-name">杜少峰</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>胆小认生，话少闷骚</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="首页"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="标签"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="所有文章"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">所有文章</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="https://github.com/dushaofeng"
+                            title="GitHub"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="mailto:dushaofeng021@163.com"
+                            title="邮箱"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+        <div class="post-header-cover
+                    text-center
+                    post-header-cover--partial"
+             style="background-image:url('/2018/02/07/在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）/post_bg.jpg');"
+             data-behavior="5">
+            
+                <div class="post-header main-content-wrap text-center">
+    
+        <h1 class="post-title" itemprop="headline">
+            在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）
+        </h1>
+    
+    
+</div>
+            
+        </div>
+
+            <div id="main" data-behavior="5"
+                 class="hasCover
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>该文章将会引导大家使用Hexo搭建私人博客，并配置tranquilpeak主题，最终效果<a href="https://dushaofeng.github.io/" target="_blank" rel="noopener">如此</a>，请<strong>严格按照</strong>以下顺序进行操作。<br><a id="more"></a></p>
+<p>文章目录<br><h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-创建Hexo工程"><span class="toc-text">1.创建Hexo工程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-导入tranquilpeak主题"><span class="toc-text">2.导入tranquilpeak主题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-必要配置项"><span class="toc-text">3.必要配置项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-根目录的-config文件配置"><span class="toc-text">3.1.根目录的_config文件配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-tranquilpeak目录的-config文件配置"><span class="toc-text">3.2.tranquilpeak目录的_config文件配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-运行项目"><span class="toc-text">4.运行项目</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-主题config的其他配置"><span class="toc-text">5.主题config的其他配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-启用RSS订阅功能"><span class="toc-text">6.启用RSS订阅功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-启用侧边栏的”分类”菜单"><span class="toc-text">7.启用侧边栏的”分类”菜单</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-启用侧边栏的”标签”菜单"><span class="toc-text">8.启用侧边栏的”标签”菜单</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-启用侧边栏的”归档”菜单"><span class="toc-text">9.启用侧边栏的”归档”菜单</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-写文章"><span class="toc-text">10.写文章</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-推送Github"><span class="toc-text">11.推送Github</span></a></li></ol></p>
+<h1 id="1-创建Hexo工程"><a href="#1-创建Hexo工程" class="headerlink" title="1.创建Hexo工程"></a>1.创建Hexo工程</h1><p>cmd下以此执行以下命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo init XXX</span><br><span class="line">cd XXX</span><br><span class="line">npm install</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure></p>
+<p>然后打开浏览器的<code>http://127.0.0.1:4000/</code>地址即可看到默认的Hexo页面。</p>
+<h1 id="2-导入tranquilpeak主题"><a href="#2-导入tranquilpeak主题" class="headerlink" title="2.导入tranquilpeak主题"></a>2.导入tranquilpeak主题</h1><ul>
+<li>下载tranquilpeak的<a href="https://github.com/LouisBarranqueiro/hexo-theme-tranquilpeak/blob/master/docs/user.md" target="_blank" rel="noopener">主题包</a><blockquote>
+<p>不要用git的方式clone，否则里面的node_modules无法安装</p>
+</blockquote>
+</li>
+<li>将主题包解压到Hexo项目的themes文件夹下面，重命名为<code>tranquilpeak</code></li>
+<li>主题里面包含了node_modules文件夹，<strong>不需要</strong>执行<code>npm install</code></li>
+<li>修改<strong>根目录</strong>下的<strong>_config.yml</strong>文件，将theme变量设置为tranquilpeak</li>
+</ul>
+<p><strong>上面操作完成之后，先不要运行hexo s，还有一些必要的配置完成之后才可以</strong></p>
+<h1 id="3-必要配置项"><a href="#3-必要配置项" class="headerlink" title="3.必要配置项"></a>3.必要配置项</h1><h2 id="3-1-根目录的-config文件配置"><a href="#3-1-根目录的-config文件配置" class="headerlink" title="3.1.根目录的_config文件配置"></a>3.1.根目录的_config文件配置</h2><ul>
+<li>subtitle、description、author信息</li>
+<li>language信息，要用themes\tranquilpeak\languages目录中的语言文件名称，比如中文的话，要用zh-cn，<strong>注意大小写</strong></li>
+<li>post_asset_folder–&gt;true，在推送文章时，才会将资源文件推送服务器</li>
+<li>relative_link–&gt;false</li>
+</ul>
+<h2 id="3-2-tranquilpeak目录的-config文件配置"><a href="#3-2-tranquilpeak目录的-config文件配置" class="headerlink" title="3.2.tranquilpeak目录的_config文件配置"></a>3.2.tranquilpeak目录的_config文件配置</h2><ul>
+<li>侧边栏sidebar的定制，可以删除、调整某个链接</li>
+<li>Header配置，Header是显示文章时右上角的小图标，可以制定其图标或者作用</li>
+<li>Author配置，可以配置作者的邮箱信息</li>
+<li>Author的picture是头像，可以使用外链，或者把文件放在主题themes\tranquilpeak\source\assets\images文件夹内，使用时直接使用图片名称即可，如Photo.jpg</li>
+<li>Author的工作、个人简介信息要去themes\tranquilpeak\languages下面当前语言的文件里面的author项中配置</li>
+</ul>
+<h1 id="4-运行项目"><a href="#4-运行项目" class="headerlink" title="4.运行项目"></a>4.运行项目</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+<p>运行之后，刷新浏览器的<a href="http://127.0.0.1:4000/地址即可，记得要点击地址栏左侧的提示，禁用该地址的cookie，否则会在更新配置后看不到更新。" target="_blank" rel="noopener">http://127.0.0.1:4000/地址即可，记得要点击地址栏左侧的提示，禁用该地址的cookie，否则会在更新配置后看不到更新。</a></p>
+<h1 id="5-主题config的其他配置"><a href="#5-主题config的其他配置" class="headerlink" title="5.主题config的其他配置"></a>5.主题config的其他配置</h1><ul>
+<li><p>sidebar_behavior</p>
+<blockquote>
+<p>配置项可以改变侧边栏的动作，包括侧边栏大小、是否自动隐藏等，配置选项为1–6，可以自己尝试配一下</p>
+</blockquote>
+</li>
+<li><p>clear_reading</p>
+<blockquote>
+<p>读文件时是否显示侧边栏</p>
+</blockquote>
+</li>
+<li><p>cover_image:</p>
+<blockquote>
+<p>博客全局的背影图片，图片资源放在主题的\themes\tranquilpeak\source\assets\images目录，配置项直接使用图片文件名称，比如common_bg.jpg</p>
+</blockquote>
+</li>
+<li><p>author_links:</p>
+<blockquote>
+<p>配置侧边栏里面的个人链接(区别于侧边栏的内容菜单，比如首页、分类、归档等)，比如添加知乎、github、微博等链接，包括标题、链接地址、图标等</p>
+</blockquote>
+</li>
+<li><p>修改侧边栏的所有菜单、链接名称</p>
+<blockquote>
+<p>如果要修改侧边栏的显示名称，需要到语言文件中修改相应中文即可</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="6-启用RSS订阅功能"><a href="#6-启用RSS订阅功能" class="headerlink" title="6.启用RSS订阅功能"></a>6.启用RSS订阅功能</h1><p>项目根目录执行：<br><code>npm install hexo-generator-feed --save</code><br>在根目录的config中添加如下配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">feed:</span><br><span class="line">    type: atom</span><br><span class="line">    path: atom.xml</span><br><span class="line">    limit: 20</span><br></pre></td></tr></table></figure></p>
+<h1 id="7-启用侧边栏的”分类”菜单"><a href="#7-启用侧边栏的”分类”菜单" class="headerlink" title="7.启用侧边栏的”分类”菜单"></a>7.启用侧边栏的”分类”菜单</h1><ul>
+<li>hexo new page “all-categories”</li>
+<li>修改根目录的source/all-categories/index.md文件，将内容替换如下，包括三个”—“符号哦<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">title: &quot;all-categories&quot;</span><br><span class="line">layout: &quot;all-categories&quot;</span><br><span class="line">comments: false</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="8-启用侧边栏的”标签”菜单"><a href="#8-启用侧边栏的”标签”菜单" class="headerlink" title="8.启用侧边栏的”标签”菜单"></a>8.启用侧边栏的”标签”菜单</h1><ul>
+<li>hexo new page “all-tags”</li>
+<li>替换根目录的source/all-tags/index.md中的内容如下：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">title: &quot;all-tags&quot;</span><br><span class="line">layout: &quot;all-tags&quot;</span><br><span class="line">comments: false</span><br></pre></td></tr></table></figure>
+<h1 id="9-启用侧边栏的”归档”菜单"><a href="#9-启用侧边栏的”归档”菜单" class="headerlink" title="9.启用侧边栏的”归档”菜单"></a>9.启用侧边栏的”归档”菜单</h1><ul>
+<li>hexo new page “all-archives”</li>
+<li>替换根目录的source/all-archives/index.md中的内容如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">title: &quot;all-archives&quot;</span><br><span class="line">layout: &quot;all-archives&quot;</span><br><span class="line">comments: false</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="10-写文章"><a href="#10-写文章" class="headerlink" title="10.写文章"></a>10.写文章</h1><ul>
+<li>还是把自带的那个hello-world.md文章删掉吧，太丑了</li>
+<li>hexo new “XXX” 新建一篇文章</li>
+</ul>
+<blockquote>
+<p>一定看清，这里的new命令后面直接跟上带日期的文章名称，并且没有page参数!</p>
+</blockquote>
+<p>上面的命令将会在工程的<code>source\_posts</code>文件夹下面生成一个文件和相同名称的文件夹，其中的文件就是博客内容，文件夹用来放置当前文章所用的一些资源，比如图片等。<br>编辑文章内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 2018-02-05-测试文章</span><br><span class="line">subtitle: 子标题</span><br><span class="line">date: 2018-02-06 10:13:19</span><br><span class="line">tags:</span><br><span class="line">    - Android</span><br><span class="line">    - 前端</span><br><span class="line">clearReading: true</span><br><span class="line">thumbnailImage: thumbnail_image.jpg</span><br><span class="line">thumbnailImagePosition: bottom</span><br><span class="line">autoThumbnailImage: true</span><br><span class="line">metaAlignment: center</span><br><span class="line">coverImage: cover_image.jpg</span><br><span class="line">coverCaption: &quot;图片说明&quot;</span><br><span class="line">coverMeta: in</span><br><span class="line">coverSize: partial</span><br><span class="line">comments: false</span><br><span class="line">meta: false</span><br><span class="line">actions: false</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">这里是文章的概览，显示在主页缩略内容上面</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line"></span><br><span class="line">这里是自动生成的文章目录</span><br><span class="line">&lt;!-- toc --&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt;CSDN的发布流程烂到家了，只能自己动手搭建技术博客</span><br><span class="line"></span><br><span class="line"># 这是大标题</span><br><span class="line"></span><br><span class="line">## 这是二级标题</span><br><span class="line"></span><br><span class="line">## 这里有个本地图片</span><br><span class="line">![](title_image.jpg)</span><br><span class="line"></span><br><span class="line">## 这里有个网络图片</span><br><span class="line">![](http://ww3.sinaimg.cn/large/006tNc79gw1fb0neee6mlj30dw0aldgf.jpg)</span><br><span class="line"></span><br><span class="line">## 文章结束</span><br></pre></td></tr></table></figure>
+<p><strong>配置解释</strong></p>
+<ul>
+<li><p><code>tags</code></p>
+<blockquote>
+<p>定义该文章的标签，定义之后可以在分类里面查看自动建立的索引</p>
+</blockquote>
+</li>
+<li><p><code>thumbnailImage</code></p>
+<blockquote>
+<p>首页的文章标题旁边图片</p>
+</blockquote>
+</li>
+<li><p><code>thumbnailImagePosition</code></p>
+<blockquote>
+<p>首页的文章图片位置</p>
+</blockquote>
+</li>
+<li><p><code>coverImage</code></p>
+<blockquote>
+<p>文章打开时顶部的封面图片</p>
+</blockquote>
+</li>
+<li><p><code>&lt;!-- more --&gt;</code></p>
+<blockquote>
+<p>这个标志之前的内容将会自动生成首页的概览</p>
+</blockquote>
+</li>
+<li><p><code>&lt;!-- toc --&gt;</code></p>
+<blockquote>
+<p>这个标志的位置将会自动生成文章目录</p>
+</blockquote>
+</li>
+<li><p><code>metaAlignment</code></p>
+<blockquote>
+<p>查看文章时，文章标题的排列，居左还是居中</p>
+</blockquote>
+</li>
+<li><p><code>coverMeta</code></p>
+<blockquote>
+<p>文章的标题是在文章图片背景的内部，还是底部</p>
+</blockquote>
+</li>
+<li><p><code>coverSize</code></p>
+<blockquote>
+<p>文章背景大小，full为全屏，partial为60%</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>thumbnailImage加载不出来</strong><br>如果thumbnailImage中设置的本地图片加载不出来，可以设置_config文件的url–&gt;/，即可正常加载</p>
+<h1 id="11-推送Github"><a href="#11-推送Github" class="headerlink" title="11.推送Github"></a>11.推送Github</h1><ul>
+<li><p>安装推送工具</p>
+<blockquote>
+<p>npm install hexo-deployer-git –save</p>
+</blockquote>
+</li>
+<li><p>配置根目录的_config文件中的github地址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: git@github.com:dushaofeng/dushaofeng.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成静态页面并验证</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>推送到github</p>
+<blockquote>
+<p>hexo d</p>
+</blockquote>
+</li>
+<li><p><strong>等待15分钟</strong>后刷新github地址即可</p>
+</li>
+</ul>
+<p><strong>提示</strong><br>这里的github推送地址和当前Hexo项目地址是分开的，也就是说，github.io的地址上面是没有hexo源码的，只有生成的静态页面。</p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/Github/">Github</a> <a class="tag tag--primary tag--small t-link" href="/tags/Hexo/">Hexo</a> <a class="tag tag--primary tag--small t-link" href="/tags/tranquilpeak/">tranquilpeak</a> <a class="tag tag--primary tag--small t-link" href="/tags/教程/">教程</a>
+
+            </div>
+        
+        
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 杜少峰. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/photo.jpg" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">杜少峰</h4>
+        
+            <div id="about-card-bio"><p>胆小认生，话少闷骚</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Android &amp; 前端</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                上海
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/common_bg.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-peofhqjkzcghmndknakluequy1y6owxdwpaqyju9ntl9zxnk7rdolb3rjjoj.min.js"></script>
+<!--SCRIPTS END-->
+
+
+
+    </body>
+</html>
