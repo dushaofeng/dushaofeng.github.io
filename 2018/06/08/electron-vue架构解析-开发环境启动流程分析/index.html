@@ -6,23 +6,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="阿杜的博客">
-    <title>阿杜的博客</title>
+    <title>electron-vue架构解析-开发环境启动流程分析 - 阿杜的博客</title>
     <meta name="author" content="杜少峰">
     
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta name="description" content="使用Hexo搭建的博客，主题采用tranquilpeak">
+    <meta name="description" content="这一节我们来看开发环境的启动流程。该框架主要修改是对开发环境的优化，包括了于开发环境的配置文件隔离，主进程和渲染进程配置文件隔离，编译过程提示等功能，因此这一节内容才是整个框架的核心。我们从开发人员用到的启动命令说起。从package中我们看到启动命令就是： 1&quot;dev&quot;: &quot;node .electron-vue/dev-runner.js&quot;, 也就是在终端使用npm run dev就可以了，而">
+<meta name="keywords" content="electron,vue,electron-vue,前端">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="阿杜的博客">
-<meta property="og:url" content="/index.html">
+<meta property="og:title" content="electron-vue架构解析-开发环境启动流程分析">
+<meta property="og:url" content="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/index.html">
 <meta property="og:site_name" content="阿杜的博客">
-<meta property="og:description" content="使用Hexo搭建的博客，主题采用tranquilpeak">
+<meta property="og:description" content="这一节我们来看开发环境的启动流程。该框架主要修改是对开发环境的优化，包括了于开发环境的配置文件隔离，主进程和渲染进程配置文件隔离，编译过程提示等功能，因此这一节内容才是整个框架的核心。我们从开发人员用到的启动命令说起。从package中我们看到启动命令就是： 1&quot;dev&quot;: &quot;node .electron-vue/dev-runner.js&quot;, 也就是在终端使用npm run dev就可以了，而">
 <meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/欢迎的Log.png">
+<meta property="og:image" content="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/render编译log.png">
+<meta property="og:image" content="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/render编译log.png">
+<meta property="og:image" content="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/流程.png">
+<meta property="og:updated_time" content="2018-06-08T08:59:36.981Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="阿杜的博客">
-<meta name="twitter:description" content="使用Hexo搭建的博客，主题采用tranquilpeak">
+<meta name="twitter:title" content="electron-vue架构解析-开发环境启动流程分析">
+<meta name="twitter:description" content="这一节我们来看开发环境的启动流程。该框架主要修改是对开发环境的优化，包括了于开发环境的配置文件隔离，主进程和渲染进程配置文件隔离，编译过程提示等功能，因此这一节内容才是整个框架的核心。我们从开发人员用到的启动命令说起。从package中我们看到启动命令就是： 1&quot;dev&quot;: &quot;node .electron-vue/dev-runner.js&quot;, 也就是在终端使用npm run dev就可以了，而">
+<meta name="twitter:image" content="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/欢迎的Log.png">
     
     
         
@@ -31,6 +38,12 @@
         <meta property="og:image" content="/assets/images/photo.jpg"/>
     
     
+        <meta property="og:image" content="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/post_head.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/post_head.jpg" />
+    
+    
+        <meta property="og:image" content="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/post_bg.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/post_bg.jpg" />
     
     
     <!--STYLES-->
@@ -52,7 +65,7 @@
         
     
 
-<header id="header" data-behavior="2">
+<header id="header" data-behavior="5">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
         <a class="header-title-link" href="/ ">阿杜的博客</a>
@@ -76,7 +89,7 @@
         
     
 
-<nav id="sidebar" data-behavior="2">
+<nav id="sidebar" data-behavior="5">
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
@@ -183,105 +196,34 @@
 </nav>
 
             
-            <div id="main" data-behavior="2"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                <section class="postShorten-group main-content-wrap">
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-        <div class="postShorten-wrap">
+        <div class="post-header-cover
+                    text-center
+                    post-header-cover--partial"
+             style="background-image:url('/2018/06/08/electron-vue架构解析-开发环境启动流程分析/post_bg.jpg');"
+             data-behavior="5">
             
-            <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
-                    
-                        <a class="link-unstyled" href="/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/">
-                            electron-vue架构解析-页面元素渲染过程分析
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2018-06-08T16:48:07+08:00">
-	
-		    6月 08, 2018
-    	
-    </time>
+                <div class="post-header main-content-wrap text-center">
+    
+        <h1 class="post-title" itemprop="headline">
+            electron-vue架构解析-开发环境启动流程分析
+        </h1>
+    
     
 </div>
-
-            </div>
-            
-                <div class="postShorten-content" itemprop="articleBody">
-                    <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#界面源码介绍"><span class="toc-text">界面源码介绍</span></a></li></ol>
-<p>页面元素渲染结构分析</p>
-<h1 id="界面源码介绍"><a href="#界面源码介绍" class="headerlink" title="界面源码介绍"></a>界面源码介绍</h1><p>前面介绍了整个环境的创建过程，这一节我们来看具体页面渲染的过程。<br>由于页面渲染都是在渲染进程完成的，我们就从渲染进程的配置文件来看入口在哪里。<br>前面介绍过，渲染进程公用了两个配置文件，一个是electron-vue/dev-client.js，他负责在界面上提示当前的编译步骤，而另一个配置文件在webpack.renderer.config.js中定义：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> rendererConfig = &#123;</span><br><span class="line">    ...</span><br><span class="line">    entry: &#123;</span><br><span class="line">        renderer: path.join(__dirname, <span class="string">'../src/renderer/main.js'</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>也就是说，渲染进程的真正入口文件在<code>src/renderer/main.js</code>里面。<br>我们来看这个文件内容：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">'./App'</span></span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">'./router'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!process.env.IS_WEB) Vue.use(<span class="built_in">require</span>(<span class="string">'vue-electron'</span>))</span><br><span class="line">Vue.config.productionTip = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  components: &#123; App &#125;,</span><br><span class="line">  router,</span><br><span class="line">  template: <span class="string">'&lt;App/&gt;'</span></span><br><span class="line">&#125;).$mount(<span class="string">'#app'</span>)</span><br></pre></td></tr></table></figure>
-<p>这个文件内容很简单，就是创建一个Vue对象，并将<code>App</code>这个Vue组件挂载到页面的<code>app</code>元素挂载上去。<br>这里的App组件根据import语句看到，他就是当前目录下的App.vue文件，由于在webpack配置的extensions字段中说明了所有vue格式文件在引用时都无需添加后缀，因此这里的import只需要使用<code>App</code>即可。<br>那么这个App组件究竟挂载到哪里的html上呢？我们还要从webpack配置说起。<br>渲染进程的webpack中使用了一个<a href="https://github.com/jantimon/html-webpack-plugin" target="_blank" rel="noopener">html-webpack-plugin</a>的插件，可以根据模板生成首页的html：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">    filename: <span class="string">'index.html'</span>,</span><br><span class="line">    template: path.resolve(__dirname, <span class="string">'../src/index.ejs'</span>),</span><br><span class="line">    minify: &#123;</span><br><span class="line">        collapseWhitespace: <span class="literal">true</span>,</span><br><span class="line">        removeAttributeQuotes: <span class="literal">true</span>,</span><br><span class="line">        removeComments: <span class="literal">true</span></span><br><span class="line">    &#125;,</span><br><span class="line">    nodeModules: process.env.NODE_ENV !== <span class="string">'production'</span></span><br><span class="line">        ? path.resolve(__dirname, <span class="string">'../node_modules'</span>)</span><br><span class="line">        : <span class="literal">false</span></span><br><span class="line">&#125;),</span><br></pre></td></tr></table></figure>
-<p>这说明模板就是<code>src/index.ejs</code>文件：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>electron-vue-framework<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">%</span> <span class="attr">if</span> (<span class="attr">htmlWebpackPlugin.options.nodeModules</span>) &#123; %&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="built_in">require</span>(<span class="string">'module'</span>).globalPaths.push(<span class="string">'&lt;%= htmlWebpackPlugin.options.nodeModules.replace(/\\/g, '</span>\\\\<span class="string">') %&gt;'</span>)</span></span><br><span class="line"><span class="undefined">      </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">%</span> &#125; %&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">      <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'development'</span>) <span class="built_in">window</span>.__static = <span class="built_in">require</span>(<span class="string">'path'</span>).join(__dirname, <span class="string">'/static'</span>).replace(<span class="regexp">/\\/g</span>, <span class="string">'\\\\'</span>)</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这个模板会被html-webpack-plugin插件生成为index.html文件，而这个模板中就包含了唯一的<div>元素：<code>app</code>。<br>也就是说，App这个Vue组件的挂载点就在生成的index.html文件上，并且是整个页面唯一的元素。<br>我们接下来看App这个组件的内容：</div></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div id=<span class="string">"app"</span>&gt;</span><br><span class="line">    &lt;router-view&gt;<span class="xml"><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;<span class="regexp">/template&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp">  export default &#123;</span></span><br><span class="line"><span class="regexp">    name: 'electron-vue-framework'</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&lt;/</span>script&gt;</span><br></pre></td></tr></table></figure>
-<p>这个组件说明，内部包含一个路由控件，并且没有指定具体路由地址（那么Vue就会加载路由中的默认地址），我们来看router/index.js中为Vue定义的路由表：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> Router <span class="keyword">from</span> <span class="string">'vue-router'</span></span><br><span class="line">Vue.use(Router)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> Router(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">'/'</span>,</span><br><span class="line">      name: <span class="string">'landing-page'</span>,</span><br><span class="line">      component: <span class="built_in">require</span>(<span class="string">'@/components/LandingPage'</span>).default</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">'*'</span>,</span><br><span class="line">      redirect: <span class="string">'/'</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>这说明默认路由叫做<code>landing-page</code>，对应的组件是LandingPage.vue，我们来看这个组件：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div id=<span class="string">"wrapper"</span>&gt;</span><br><span class="line">    &lt;img id=<span class="string">"logo"</span> src=<span class="string">"~@/assets/logo.png"</span> alt=<span class="string">"electron-vue"</span>&gt;</span><br><span class="line">    &lt;main&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"left-side"</span>&gt;</span><br><span class="line">        &lt;span <span class="class"><span class="keyword">class</span></span>=<span class="string">"title"</span>&gt;</span><br><span class="line">          Welcome to your <span class="keyword">new</span> project!</span><br><span class="line">        &lt;<span class="regexp">/span&gt;</span></span><br><span class="line"><span class="regexp">        &lt;system-information&gt;&lt;/</span>system-information&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">      &lt;div class="right-side"&gt;</span></span><br><span class="line"><span class="regexp">        &lt;div class="doc"&gt;</span></span><br><span class="line"><span class="regexp">          &lt;div class="title"&gt;Getting Started&lt;/</span>div&gt;</span><br><span class="line">          &lt;p&gt;</span><br><span class="line">            electron-vue comes packed <span class="keyword">with</span> detailed documentation that covers everything <span class="keyword">from</span></span><br><span class="line">            internal configurations, using the project structure, building your application,</span><br><span class="line">            and so much more.</span><br><span class="line">          &lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">          &lt;button @click="open('https:/</span><span class="regexp">/simulatedgreg.gitbooks.io/</span>electron-vue/content/<span class="string">')"&gt;Read the Docs&lt;/button&gt;&lt;br&gt;&lt;br&gt;</span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;div class="doc"&gt;</span></span><br><span class="line"><span class="string">          &lt;div class="title alt"&gt;Other Documentation&lt;/div&gt;</span></span><br><span class="line"><span class="string">          &lt;button class="alt" @click="open('</span>https:<span class="comment">//electron.atom.io/docs/')"&gt;Electron&lt;/button&gt;</span></span><br><span class="line">          &lt;button <span class="class"><span class="keyword">class</span></span>=<span class="string">"alt"</span> @click=<span class="string">"open('https://vuejs.org/v2/guide/')"</span>&gt;Vue.js&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>div&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/m</span>ain&gt;</span><br><span class="line">  &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">...</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;style&gt;</span></span><br><span class="line"><span class="regexp">...</span></span><br><span class="line"><span class="regexp">&lt;/</span>style&gt;</span><br></pre></td></tr></table></figure>
-<p>这里很清晰的看到，这个页面包含了<code>left-side</code>和<code>right-side</code>两个div，分列页面左右（具体排列可以查看css中描述），左侧的布局还嵌套了一个<code>system-information</code>的组件，而右侧布局中就是一些文字+按钮。<br>而<code>system-information</code>的组件就是SystemInformation.vue文件，内容如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"title"</span>&gt;Information&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    &lt;div class="items"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;div class="item"&gt;</span></span><br><span class="line"><span class="regexp">        &lt;div class="name"&gt;Path:&lt;/</span>div&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"value"</span>&gt;&#123;&#123; path &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"item"</span>&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"name"</span>&gt;Route Name:<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"value"</span>&gt;&#123;&#123; name &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"item"</span>&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"name"</span>&gt;Vue.js:<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"value"</span>&gt;&#123;&#123; vue &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"item"</span>&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"name"</span>&gt;Electron:<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"value"</span>&gt;&#123;&#123; electron &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"item"</span>&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"name"</span>&gt;Node:<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"value"</span>&gt;&#123;&#123; node &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"item"</span>&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"name"</span>&gt;Platform:<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"value"</span>&gt;&#123;&#123; platform &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>div&gt;</span><br><span class="line">&lt;<span class="regexp">/template&gt;</span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp">...</span></span><br><span class="line"><span class="regexp">&lt;/</span>script&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">...</span><br><span class="line">&lt;<span class="regexp">/style&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这都是一些系统属性。<br>至此，我们明白了整个页面是怎么被渲染出来的。他的布局如下：<br><img src="页面布局.png" alt=""><br>通过<code>vue-devtools</code>工具我们也可以看出他的渲染结构：<br><img src="vue插件.png" alt=""><br>至此，整个页面的渲染过程我们就分析完了。</p>
-
-                    
-                        
-
-                    
-                    
-                        <p>
-                            <a href="/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/#post-footer" class="postShorten-excerpt_link link">
-                                评论和共享
-                            </a>
-                        </p>
-                    
-                </div>
             
         </div>
-        
-            <a href="/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/">
-                <div class="postShorten-thumbnailimg">
-                    <img alt="" itemprop="image" src="/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/post_head.jpg"/>
-                </div>
-            </a>
-            
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
-                    
-                        <a class="link-unstyled" href="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/">
-                            electron-vue架构解析-开发环境启动流程分析
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2018-06-08T16:47:52+08:00">
-	
-		    6月 08, 2018
-    	
-    </time>
-    
-</div>
 
-            </div>
-            
-                <div class="postShorten-content" itemprop="articleBody">
-                    <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-渲染进程启动过程分析"><span class="toc-text">1.渲染进程启动过程分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-渲染进程创建webpack对象"><span class="toc-text">1.1.渲染进程创建webpack对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#渲染进程的dev-client配置文件"><span class="toc-text">渲染进程的dev-client配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#渲染进程的webpack-renderer-config配置文件"><span class="toc-text">渲染进程的webpack.renderer.config配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-渲染进程利用webpack对象来创建WebpackDevServer对象"><span class="toc-text">1.2.渲染进程利用webpack对象来创建WebpackDevServer对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-渲染进程监听webpack编译过程"><span class="toc-text">1.3.渲染进程监听webpack编译过程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-主进程过程分析"><span class="toc-text">2.主进程过程分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-主进程的webpack创建过程"><span class="toc-text">1.1.主进程的webpack创建过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主进程的index-dev-js配置文件"><span class="toc-text">主进程的index.dev.js配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主进程的webpack-main-config-js配置文件"><span class="toc-text">主进程的webpack.main.config.js配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-主进程的编译过程跟踪"><span class="toc-text">2.2.主进程的编译过程跟踪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-主进程的代码”热更新”"><span class="toc-text">2.3.主进程的代码”热更新”</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Electron过程分析"><span class="toc-text">3.Electron过程分析</span></a></li></ol>
+            <div id="main" data-behavior="5"
+                 class="hasCover
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-渲染进程启动过程分析"><span class="toc-text">1.渲染进程启动过程分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-渲染进程创建webpack对象"><span class="toc-text">1.1.渲染进程创建webpack对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#渲染进程的dev-client配置文件"><span class="toc-text">渲染进程的dev-client配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#渲染进程的webpack-renderer-config配置文件"><span class="toc-text">渲染进程的webpack.renderer.config配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-渲染进程利用webpack对象来创建WebpackDevServer对象"><span class="toc-text">1.2.渲染进程利用webpack对象来创建WebpackDevServer对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-渲染进程监听webpack编译过程"><span class="toc-text">1.3.渲染进程监听webpack编译过程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-主进程过程分析"><span class="toc-text">2.主进程过程分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-主进程的webpack创建过程"><span class="toc-text">1.1.主进程的webpack创建过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主进程的index-dev-js配置文件"><span class="toc-text">主进程的index.dev.js配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主进程的webpack-main-config-js配置文件"><span class="toc-text">主进程的webpack.main.config.js配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-主进程的编译过程跟踪"><span class="toc-text">2.2.主进程的编译过程跟踪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-主进程的代码”热更新”"><span class="toc-text">2.3.主进程的代码”热更新”</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Electron过程分析"><span class="toc-text">3.Electron过程分析</span></a></li></ol>
 <p>这一节我们来看开发环境的启动流程。<br>该框架主要修改是对开发环境的优化，包括了于开发环境的配置文件隔离，主进程和渲染进程配置文件隔离，编译过程提示等功能，因此这一节内容才是整个框架的核心。<br>我们从开发人员用到的启动命令说起。<br>从package中我们看到启动命令就是：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"dev"</span>: <span class="string">"node .electron-vue/dev-runner.js"</span>,</span><br></pre></td></tr></table></figure>
 <p>也就是在终端使用<code>npm run dev</code>就可以了，而这个命令对应的脚本就是dev-runner.js。</p>
@@ -415,232 +357,24 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">startElectron</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    electronProcess = spawn(electron, [<span class="string">'--inspect=5858'</span>, <span class="string">'.'</span>]);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>原来是通过node的spawn方法运行了electron，并传递了两个参数。<br>两个参数分别代表打开5858的调试端口和electron的运行目录（也就是当前目录）。<br>至此，调试环境运行时的流程就介绍完了，我们用一张流程图来归纳一下这个过程：<br><img src="流程.png" alt=""></p>
 
-                    
-                        
+            
 
-                    
-                    
-                        <p>
-                            <a href="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/#post-footer" class="postShorten-excerpt_link link">
-                                评论和共享
-                            </a>
-                        </p>
-                    
-                </div>
-            
         </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
         
-            <a href="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/">
-                <div class="postShorten-thumbnailimg">
-                    <img alt="" itemprop="image" src="/2018/06/08/electron-vue架构解析-开发环境启动流程分析/post_head.jpg"/>
-                </div>
-            </a>
-            
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
-                    
-                        <a class="link-unstyled" href="/2018/06/08/electron-vue架构解析-生产环境打包过程分析/">
-                            electron-vue架构解析-生产环境打包过程分析
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2018-06-08T16:46:45+08:00">
-	
-		    6月 08, 2018
-    	
-    </time>
-    
-</div>
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/electron/">electron</a> <a class="tag tag--primary tag--small t-link" href="/tags/electron-vue/">electron-vue</a> <a class="tag tag--primary tag--small t-link" href="/tags/vue/">vue</a> <a class="tag tag--primary tag--small t-link" href="/tags/前端/">前端</a>
 
             </div>
-            
-                <div class="postShorten-content" itemprop="articleBody">
-                    <h1 id="table-of-contents">目录</h1>
-<p>我们先从生产环境打包流程来分析。<br>从package.json文件入口来看打包命令和调用的脚本：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: &#123;</span><br><span class="line">  <span class="string">"build"</span>: <span class="string">"node .electron-vue/build.js"</span>,</span><br><span class="line">  <span class="string">"build:darwin"</span>: <span class="string">"cross-env BUILD_TARGET=darwin node .electron-vue/build.js"</span>,</span><br><span class="line">  <span class="string">"build:linux"</span>: <span class="string">"cross-env BUILD_TARGET=linux node .electron-vue/build.js"</span>,</span><br><span class="line">  <span class="string">"build:mas"</span>: <span class="string">"cross-env BUILD_TARGET=mas node .electron-vue/build.js"</span>,</span><br><span class="line">  <span class="string">"build:win32"</span>: <span class="string">"cross-env BUILD_TARGET=win32 node .electron-vue/build.js"</span>,</span><br><span class="line">  <span class="string">"build:clean"</span>: <span class="string">"cross-env BUILD_TARGET=clean node .electron-vue/build.js"</span>,</span><br><span class="line">  <span class="string">"build:web"</span>: <span class="string">"cross-env BUILD_TARGET=web node .electron-vue/build.js"</span>,</span><br><span class="line">  ...</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<p>这说明打包的入口文件为build.js，我们就从这个入口文件来分析打包的过程。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//用到的配置文件</span></span><br><span class="line"><span class="keyword">const</span> buildConfig = <span class="built_in">require</span>(<span class="string">'./build.config'</span>)</span><br><span class="line"><span class="keyword">const</span> mainConfig = <span class="built_in">require</span>(<span class="string">'./webpack.main.config'</span>)</span><br><span class="line"><span class="keyword">const</span> rendererConfig = <span class="built_in">require</span>(<span class="string">'./webpack.renderer.config'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//除了`clean`和`web`的命令外，其他指令都会进行build()的操作：</span></span><br><span class="line"><span class="keyword">if</span> (process.env.BUILD_TARGET === <span class="string">'clean'</span>) clean()</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (process.env.BUILD_TARGET === <span class="string">'web'</span>) web()</span><br><span class="line"><span class="keyword">else</span> build()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">build</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="comment">//构建app</span></span><br><span class="line">  bundleApp()</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line">  <span class="comment">//打包主进程</span></span><br><span class="line">  pack(mainConfig).then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">  &#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line">  <span class="comment">//打包渲染进程</span></span><br><span class="line">  pack(rendererConfig).then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">  &#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bundleApp</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  packager(buildConfig, (err, appPaths) =&gt; &#123;</span><br><span class="line">        ...</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pack</span> (<span class="params">config</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    webpack(config, (err, stats) =&gt; &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这个构建步骤中，分别进行了三个操作：</p>
-<ul>
-<li>使用buildConfig(也就是build.config.js)–构建app</li>
-<li>使用mainConfig(也就是webpack.main.config.js)–打包主进程</li>
-<li>使用rendererConfig(也就是webpack.renderer.config.js)–打包渲染进程</li>
-</ul>
-<p>主进程和渲染进程使用的配置文件我们在稍后的开发流程中分析，这里主要看构建app用的配置文件，也就是build.config文件：<br>文件内容很简单，我们直接贴出源码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="comment">//目标架构和平台</span></span><br><span class="line">    arch: <span class="string">'x64'</span>,</span><br><span class="line">    platform: process.env.BUILD_TARGET || <span class="string">'all'</span>,</span><br><span class="line">    <span class="comment">//是否启用asar压缩打包</span></span><br><span class="line">    asar: <span class="literal">true</span>,</span><br><span class="line">    <span class="comment">//打包目录</span></span><br><span class="line">    dir: path.join(__dirname, <span class="string">'../'</span>),</span><br><span class="line">    <span class="comment">//应用图标</span></span><br><span class="line">    icon: path.join(__dirname, <span class="string">'../build/icons/icon'</span>),</span><br><span class="line">    ignore: <span class="regexp">/(^\/(src|test|\.[a-z]+|README|yarn|static|dist\/web))|\.gitkeep/</span>,</span><br><span class="line">    out: path.join(__dirname, <span class="string">'../build'</span>),</span><br><span class="line">    overwrite: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这个文件内容很简单，用于electron-packager打包时读取，主要配置了最终生成exe文件的一些参数，包括：</p>
-<ul>
-<li>arch</li>
-<li>platform<br> 目标架构和平台</li>
-<li>asar<br> 是否启用asar压缩打包</li>
-<li>out</li>
-<li>dir<br> 指定生成目录</li>
-<li>icon<br> 图标</li>
-<li>ignore<br> 忽略那些文件</li>
-<li>overwrite<br> 覆盖模式打包</li>
-</ul>
-<p>该文件中配置的参数其实都可以通过命令的形式实现：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">electron-packager ./app &lt;name&gt; --platform=win32 --arch=x64 --overwrite --ignore=dev-settings</span><br></pre></td></tr></table></figure>
-<p>写在配置文件中可以实现“傻瓜式”的打包目的。<br>这就是生产环境打包的过程。<br>下一节我们看开发环境的启动过程。</p>
+        
+        
+        
+    </div>
+</article>
 
-                    
-                        
-
-                    
-                    
-                        <p>
-                            <a href="/2018/06/08/electron-vue架构解析-生产环境打包过程分析/#post-footer" class="postShorten-excerpt_link link">
-                                评论和共享
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-            <a href="/2018/06/08/electron-vue架构解析-生产环境打包过程分析/">
-                <div class="postShorten-thumbnailimg">
-                    <img alt="" itemprop="image" src="/2018/06/08/electron-vue架构解析-生产环境打包过程分析/post_head.jpg"/>
-                </div>
-            </a>
-            
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
-                    
-                        <a class="link-unstyled" href="/2018/06/08/electron-vue架构解析-序言/">
-                            electron-vue架构解析-序言
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2018-06-08T16:41:45+08:00">
-	
-		    6月 08, 2018
-    	
-    </time>
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content" itemprop="articleBody">
-                    <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-下载架构模板"><span class="toc-text">1.下载架构模板</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-代码结构"><span class="toc-text">2.代码结构</span></a></li></ol>
-<p>本系列文章将介绍<a href="https://github.com/SimulatedGREG/electron-vue" target="_blank" rel="noopener">electron-vue</a>前端框架的作用、结构、使用方法。</p>
-<p>electron-vue是SimulatedGREG基于<a href="https://github.com/vuejs/vue-cli" target="_blank" rel="noopener">vue-cli</a>搭建的Vue+Webpack+Electron脚手架，可以用来开发跨PC平台的应用，源码地址在<a href="https://github.com/SimulatedGREG/electron-vue" target="_blank" rel="noopener">这里</a>。<br>其主要功能/特色包括：</p>
-<ul>
-<li>主进程和渲染进程配置文件分离</li>
-<li>代码热更新</li>
-<li>详细的Log输出</li>
-<li>除了必备的Electron、Vue、Webpack等插件外，还可以一键配置：Axios\Vue-router\Vuex\Eslint\等插件</li>
-</ul>
-<p>由于其自带的<a href="https://simulatedgreg.gitbooks.io/electron-vue/content/en/" target="_blank" rel="noopener">说明文件</a>仅仅说明了该项目的概要、使用方法，并没有整个结构的解释，本系列文章就来从源码角度分析这个脚手架如何管理代码、如何分离编译环境、如何进行热更新等问题。</p>
-<h1 id="1-下载架构模板"><a href="#1-下载架构模板" class="headerlink" title="1.下载架构模板"></a>1.下载架构模板</h1><p>由于electron-vue基于<strong>vue-cli</strong>进行了二次封装，因此在使用之前，需要先安装vue-cli的脚手架：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
-<p>然后初始化electron-vue的项目：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue init simulatedgreg/electron-vue my-project</span><br></pre></td></tr></table></figure>
-<p>然后在项目根目录下使用npm或yarn安装依赖即可使用：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd my-project</span><br><span class="line">yarn # or npm install</span><br><span class="line">yarn run dev # or npm run dev</span><br></pre></td></tr></table></figure>
-<h1 id="2-代码结构"><a href="#2-代码结构" class="headerlink" title="2.代码结构"></a>2.代码结构</h1><p>我们先来看一下原始版的代码结构：<br>图图图<br>从这个结构中可以看到该框架下的文件大致可以分为四个部分：</p>
-<ul>
-<li>webpack配置文件</li>
-<li>生成目录&amp;依赖目录</li>
-<li>源码目录</li>
-<li>全局配置文件</li>
-</ul>
-<p>接下来的几个小节我们分别来介绍他们的作用。</p>
-
-                    
-                        
-
-                    
-                    
-                        <p>
-                            <a href="/2018/06/08/electron-vue架构解析-序言/#post-footer" class="postShorten-excerpt_link link">
-                                评论和共享
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-            <a href="/2018/06/08/electron-vue架构解析-序言/">
-                <div class="postShorten-thumbnailimg">
-                    <img alt="" itemprop="image" src="/2018/06/08/electron-vue架构解析-序言/post_head.jpg"/>
-                </div>
-            </a>
-            
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-left" itemscope itemType="http://schema.org/BlogPosting">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
-                    
-                        <a class="link-unstyled" href="/2018/02/07/在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）/">
-                            在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2018-02-07T14:06:25+08:00">
-	
-		    2月 07, 2018
-    	
-    </time>
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-excerpt" itemprop="articleBody">
-                    <p>该文章将会引导大家使用Hexo搭建私人博客，并配置tranquilpeak主题，最终效果<a href="https://dushaofeng.github.io/" target="_blank" rel="noopener">如此</a>，请<strong>严格按照</strong>以下顺序进行操作。<br>
-                    
-                        <a href="/2018/02/07/在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）/" class="postShorten-excerpt_link link">
-                            阅读全文
-                        </a>
-                        
-                    
-                </div>
-            
-        </div>
-        
-            <a href="/2018/02/07/在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）/">
-                <div class="postShorten-thumbnailimg">
-                    <img alt="" itemprop="image" src="/2018/02/07/在Github上使用Hexo搭建博客并配置tranquilpeak主题（原）/post_head.jpg"/>
-                </div>
-            </a>
-            
-        
-    </article>
-    
-    <div class="pagination-bar">
-    <ul class="pagination">
-        
-        
-        <li class="pagination-number">第 1 页 共 1 页</li>
-    </ul>
-</div>
-
-</section>
 
 
                 <footer id="footer" class="main-content-wrap">

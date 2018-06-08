@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="阿杜的博客">
+    <title>electron-vue架构解析-序言 - 阿杜的博客</title>
+    <meta name="author" content="杜少峰">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="本系列文章将介绍electron-vue前端框架的作用、结构、使用方法。 electron-vue是SimulatedGREG基于vue-cli搭建的Vue+Webpack+Electron脚手架，可以用来开发跨PC平台的应用，源码地址在这里。其主要功能/特色包括：  主进程和渲染进程配置文件分离 代码热更新 详细的Log输出 除了必备的Electron、Vue、Webpack等插件外，还可以一">
+<meta name="keywords" content="electron,vue,electron-vue,前端">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="electron-vue架构解析-序言">
+<meta property="og:url" content="/2018/06/08/electron-vue架构解析-序言/index.html">
+<meta property="og:site_name" content="阿杜的博客">
+<meta property="og:description" content="本系列文章将介绍electron-vue前端框架的作用、结构、使用方法。 electron-vue是SimulatedGREG基于vue-cli搭建的Vue+Webpack+Electron脚手架，可以用来开发跨PC平台的应用，源码地址在这里。其主要功能/特色包括：  主进程和渲染进程配置文件分离 代码热更新 详细的Log输出 除了必备的Electron、Vue、Webpack等插件外，还可以一">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-06-08T08:59:56.972Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="electron-vue架构解析-序言">
+<meta name="twitter:description" content="本系列文章将介绍electron-vue前端框架的作用、结构、使用方法。 electron-vue是SimulatedGREG基于vue-cli搭建的Vue+Webpack+Electron脚手架，可以用来开发跨PC平台的应用，源码地址在这里。其主要功能/特色包括：  主进程和渲染进程配置文件分离 代码热更新 详细的Log输出 除了必备的Electron、Vue、Webpack等插件外，还可以一">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="/assets/images/photo.jpg"/>
+    
+    
+        <meta property="og:image" content="/2018/06/08/electron-vue架构解析-序言/post_head.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="/2018/06/08/electron-vue架构解析-序言/post_head.jpg" />
+    
+    
+        <meta property="og:image" content="/2018/06/08/electron-vue架构解析-序言/post_bg.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="/2018/06/08/electron-vue架构解析-序言/post_bg.jpg" />
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-pz4cc6y13wt2trzqa8l3n9v0yykr0sstdaheem7qj628nhjmhp9pfawvqawz.min.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">阿杜的博客</a>
+    </div>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/photo.jpg" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/photo.jpg" alt="作者的图片"/>
+                </a>
+                <h4 class="sidebar-profile-name">杜少峰</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>胆小认生，话少闷骚</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="首页"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="标签"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="所有文章"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">所有文章</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="https://github.com/dushaofeng"
+                            title="GitHub"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="mailto:dushaofeng021@163.com"
+                            title="邮箱"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+        <div class="post-header-cover
+                    text-center
+                    post-header-cover--partial"
+             style="background-image:url('/2018/06/08/electron-vue架构解析-序言/post_bg.jpg');"
+             data-behavior="5">
+            
+                <div class="post-header main-content-wrap text-center">
+    
+        <h1 class="post-title" itemprop="headline">
+            electron-vue架构解析-序言
+        </h1>
+    
+    
+</div>
+            
+        </div>
+
+            <div id="main" data-behavior="5"
+                 class="hasCover
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-下载架构模板"><span class="toc-text">1.下载架构模板</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-代码结构"><span class="toc-text">2.代码结构</span></a></li></ol>
+<p>本系列文章将介绍<a href="https://github.com/SimulatedGREG/electron-vue" target="_blank" rel="noopener">electron-vue</a>前端框架的作用、结构、使用方法。</p>
+<p>electron-vue是SimulatedGREG基于<a href="https://github.com/vuejs/vue-cli" target="_blank" rel="noopener">vue-cli</a>搭建的Vue+Webpack+Electron脚手架，可以用来开发跨PC平台的应用，源码地址在<a href="https://github.com/SimulatedGREG/electron-vue" target="_blank" rel="noopener">这里</a>。<br>其主要功能/特色包括：</p>
+<ul>
+<li>主进程和渲染进程配置文件分离</li>
+<li>代码热更新</li>
+<li>详细的Log输出</li>
+<li>除了必备的Electron、Vue、Webpack等插件外，还可以一键配置：Axios\Vue-router\Vuex\Eslint\等插件</li>
+</ul>
+<p>由于其自带的<a href="https://simulatedgreg.gitbooks.io/electron-vue/content/en/" target="_blank" rel="noopener">说明文件</a>仅仅说明了该项目的概要、使用方法，并没有整个结构的解释，本系列文章就来从源码角度分析这个脚手架如何管理代码、如何分离编译环境、如何进行热更新等问题。</p>
+<h1 id="1-下载架构模板"><a href="#1-下载架构模板" class="headerlink" title="1.下载架构模板"></a>1.下载架构模板</h1><p>由于electron-vue基于<strong>vue-cli</strong>进行了二次封装，因此在使用之前，需要先安装vue-cli的脚手架：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
+<p>然后初始化electron-vue的项目：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue init simulatedgreg/electron-vue my-project</span><br></pre></td></tr></table></figure>
+<p>然后在项目根目录下使用npm或yarn安装依赖即可使用：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd my-project</span><br><span class="line">yarn # or npm install</span><br><span class="line">yarn run dev # or npm run dev</span><br></pre></td></tr></table></figure>
+<h1 id="2-代码结构"><a href="#2-代码结构" class="headerlink" title="2.代码结构"></a>2.代码结构</h1><p>我们先来看一下原始版的代码结构：<br>图图图<br>从这个结构中可以看到该框架下的文件大致可以分为四个部分：</p>
+<ul>
+<li>webpack配置文件</li>
+<li>生成目录&amp;依赖目录</li>
+<li>源码目录</li>
+<li>全局配置文件</li>
+</ul>
+<p>接下来的几个小节我们分别来介绍他们的作用。</p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/electron/">electron</a> <a class="tag tag--primary tag--small t-link" href="/tags/electron-vue/">electron-vue</a> <a class="tag tag--primary tag--small t-link" href="/tags/vue/">vue</a> <a class="tag tag--primary tag--small t-link" href="/tags/前端/">前端</a>
+
+            </div>
+        
+        
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 杜少峰. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/photo.jpg" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">杜少峰</h4>
+        
+            <div id="about-card-bio"><p>胆小认生，话少闷骚</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Android &amp; 前端</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                上海
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/common_bg.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-peofhqjkzcghmndknakluequy1y6owxdwpaqyju9ntl9zxnk7rdolb3rjjoj.min.js"></script>
+<!--SCRIPTS END-->
+
+
+
+    </body>
+</html>

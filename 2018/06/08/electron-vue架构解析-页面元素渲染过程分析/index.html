@@ -1,0 +1,321 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="阿杜的博客">
+    <title>electron-vue架构解析-页面元素渲染过程分析 - 阿杜的博客</title>
+    <meta name="author" content="杜少峰">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="页面元素渲染结构分析 界面源码介绍前面介绍了整个环境的创建过程，这一节我们来看具体页面渲染的过程。由于页面渲染都是在渲染进程完成的，我们就从渲染进程的配置文件来看入口在哪里。前面介绍过，渲染进程公用了两个配置文件，一个是electron-vue/dev-client.js，他负责在界面上提示当前的编译步骤，而另一个配置文件在webpack.renderer.config.js中定义： 12345">
+<meta name="keywords" content="electron,vue,electron-vue,前端">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="electron-vue架构解析-页面元素渲染过程分析">
+<meta property="og:url" content="/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/index.html">
+<meta property="og:site_name" content="阿杜的博客">
+<meta property="og:description" content="页面元素渲染结构分析 界面源码介绍前面介绍了整个环境的创建过程，这一节我们来看具体页面渲染的过程。由于页面渲染都是在渲染进程完成的，我们就从渲染进程的配置文件来看入口在哪里。前面介绍过，渲染进程公用了两个配置文件，一个是electron-vue/dev-client.js，他负责在界面上提示当前的编译步骤，而另一个配置文件在webpack.renderer.config.js中定义： 12345">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/页面布局.png">
+<meta property="og:image" content="/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/vue插件.png">
+<meta property="og:updated_time" content="2018-06-08T09:01:35.995Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="electron-vue架构解析-页面元素渲染过程分析">
+<meta name="twitter:description" content="页面元素渲染结构分析 界面源码介绍前面介绍了整个环境的创建过程，这一节我们来看具体页面渲染的过程。由于页面渲染都是在渲染进程完成的，我们就从渲染进程的配置文件来看入口在哪里。前面介绍过，渲染进程公用了两个配置文件，一个是electron-vue/dev-client.js，他负责在界面上提示当前的编译步骤，而另一个配置文件在webpack.renderer.config.js中定义： 12345">
+<meta name="twitter:image" content="/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/页面布局.png">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="/assets/images/photo.jpg"/>
+    
+    
+        <meta property="og:image" content="/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/post_head.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/post_head.jpg" />
+    
+    
+        <meta property="og:image" content="/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/post_bg.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/post_bg.jpg" />
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-pz4cc6y13wt2trzqa8l3n9v0yykr0sstdaheem7qj628nhjmhp9pfawvqawz.min.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">阿杜的博客</a>
+    </div>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/photo.jpg" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/photo.jpg" alt="作者的图片"/>
+                </a>
+                <h4 class="sidebar-profile-name">杜少峰</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>胆小认生，话少闷骚</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="首页"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="标签"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="所有文章"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">所有文章</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="https://github.com/dushaofeng"
+                            title="GitHub"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="mailto:dushaofeng021@163.com"
+                            title="邮箱"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+        <div class="post-header-cover
+                    text-center
+                    post-header-cover--partial"
+             style="background-image:url('/2018/06/08/electron-vue架构解析-页面元素渲染过程分析/post_bg.jpg');"
+             data-behavior="5">
+            
+                <div class="post-header main-content-wrap text-center">
+    
+        <h1 class="post-title" itemprop="headline">
+            electron-vue架构解析-页面元素渲染过程分析
+        </h1>
+    
+    
+</div>
+            
+        </div>
+
+            <div id="main" data-behavior="5"
+                 class="hasCover
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#界面源码介绍"><span class="toc-text">界面源码介绍</span></a></li></ol>
+<p>页面元素渲染结构分析</p>
+<h1 id="界面源码介绍"><a href="#界面源码介绍" class="headerlink" title="界面源码介绍"></a>界面源码介绍</h1><p>前面介绍了整个环境的创建过程，这一节我们来看具体页面渲染的过程。<br>由于页面渲染都是在渲染进程完成的，我们就从渲染进程的配置文件来看入口在哪里。<br>前面介绍过，渲染进程公用了两个配置文件，一个是electron-vue/dev-client.js，他负责在界面上提示当前的编译步骤，而另一个配置文件在webpack.renderer.config.js中定义：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> rendererConfig = &#123;</span><br><span class="line">    ...</span><br><span class="line">    entry: &#123;</span><br><span class="line">        renderer: path.join(__dirname, <span class="string">'../src/renderer/main.js'</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也就是说，渲染进程的真正入口文件在<code>src/renderer/main.js</code>里面。<br>我们来看这个文件内容：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">'./App'</span></span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">'./router'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!process.env.IS_WEB) Vue.use(<span class="built_in">require</span>(<span class="string">'vue-electron'</span>))</span><br><span class="line">Vue.config.productionTip = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  components: &#123; App &#125;,</span><br><span class="line">  router,</span><br><span class="line">  template: <span class="string">'&lt;App/&gt;'</span></span><br><span class="line">&#125;).$mount(<span class="string">'#app'</span>)</span><br></pre></td></tr></table></figure>
+<p>这个文件内容很简单，就是创建一个Vue对象，并将<code>App</code>这个Vue组件挂载到页面的<code>app</code>元素挂载上去。<br>这里的App组件根据import语句看到，他就是当前目录下的App.vue文件，由于在webpack配置的extensions字段中说明了所有vue格式文件在引用时都无需添加后缀，因此这里的import只需要使用<code>App</code>即可。<br>那么这个App组件究竟挂载到哪里的html上呢？我们还要从webpack配置说起。<br>渲染进程的webpack中使用了一个<a href="https://github.com/jantimon/html-webpack-plugin" target="_blank" rel="noopener">html-webpack-plugin</a>的插件，可以根据模板生成首页的html：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">    filename: <span class="string">'index.html'</span>,</span><br><span class="line">    template: path.resolve(__dirname, <span class="string">'../src/index.ejs'</span>),</span><br><span class="line">    minify: &#123;</span><br><span class="line">        collapseWhitespace: <span class="literal">true</span>,</span><br><span class="line">        removeAttributeQuotes: <span class="literal">true</span>,</span><br><span class="line">        removeComments: <span class="literal">true</span></span><br><span class="line">    &#125;,</span><br><span class="line">    nodeModules: process.env.NODE_ENV !== <span class="string">'production'</span></span><br><span class="line">        ? path.resolve(__dirname, <span class="string">'../node_modules'</span>)</span><br><span class="line">        : <span class="literal">false</span></span><br><span class="line">&#125;),</span><br></pre></td></tr></table></figure>
+<p>这说明模板就是<code>src/index.ejs</code>文件：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>electron-vue-framework<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">%</span> <span class="attr">if</span> (<span class="attr">htmlWebpackPlugin.options.nodeModules</span>) &#123; %&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="built_in">require</span>(<span class="string">'module'</span>).globalPaths.push(<span class="string">'&lt;%= htmlWebpackPlugin.options.nodeModules.replace(/\\/g, '</span>\\\\<span class="string">') %&gt;'</span>)</span></span><br><span class="line"><span class="undefined">      </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">%</span> &#125; %&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">      <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'development'</span>) <span class="built_in">window</span>.__static = <span class="built_in">require</span>(<span class="string">'path'</span>).join(__dirname, <span class="string">'/static'</span>).replace(<span class="regexp">/\\/g</span>, <span class="string">'\\\\'</span>)</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这个模板会被html-webpack-plugin插件生成为index.html文件，而这个模板中就包含了唯一的<div>元素：<code>app</code>。<br>也就是说，App这个Vue组件的挂载点就在生成的index.html文件上，并且是整个页面唯一的元素。<br>我们接下来看App这个组件的内容：</div></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div id=<span class="string">"app"</span>&gt;</span><br><span class="line">    &lt;router-view&gt;<span class="xml"><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;<span class="regexp">/template&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp">  export default &#123;</span></span><br><span class="line"><span class="regexp">    name: 'electron-vue-framework'</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&lt;/</span>script&gt;</span><br></pre></td></tr></table></figure>
+<p>这个组件说明，内部包含一个路由控件，并且没有指定具体路由地址（那么Vue就会加载路由中的默认地址），我们来看router/index.js中为Vue定义的路由表：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> Router <span class="keyword">from</span> <span class="string">'vue-router'</span></span><br><span class="line">Vue.use(Router)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> Router(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">'/'</span>,</span><br><span class="line">      name: <span class="string">'landing-page'</span>,</span><br><span class="line">      component: <span class="built_in">require</span>(<span class="string">'@/components/LandingPage'</span>).default</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">'*'</span>,</span><br><span class="line">      redirect: <span class="string">'/'</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>这说明默认路由叫做<code>landing-page</code>，对应的组件是LandingPage.vue，我们来看这个组件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div id=<span class="string">"wrapper"</span>&gt;</span><br><span class="line">    &lt;img id=<span class="string">"logo"</span> src=<span class="string">"~@/assets/logo.png"</span> alt=<span class="string">"electron-vue"</span>&gt;</span><br><span class="line">    &lt;main&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"left-side"</span>&gt;</span><br><span class="line">        &lt;span <span class="class"><span class="keyword">class</span></span>=<span class="string">"title"</span>&gt;</span><br><span class="line">          Welcome to your <span class="keyword">new</span> project!</span><br><span class="line">        &lt;<span class="regexp">/span&gt;</span></span><br><span class="line"><span class="regexp">        &lt;system-information&gt;&lt;/</span>system-information&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">      &lt;div class="right-side"&gt;</span></span><br><span class="line"><span class="regexp">        &lt;div class="doc"&gt;</span></span><br><span class="line"><span class="regexp">          &lt;div class="title"&gt;Getting Started&lt;/</span>div&gt;</span><br><span class="line">          &lt;p&gt;</span><br><span class="line">            electron-vue comes packed <span class="keyword">with</span> detailed documentation that covers everything <span class="keyword">from</span></span><br><span class="line">            internal configurations, using the project structure, building your application,</span><br><span class="line">            and so much more.</span><br><span class="line">          &lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">          &lt;button @click="open('https:/</span><span class="regexp">/simulatedgreg.gitbooks.io/</span>electron-vue/content/<span class="string">')"&gt;Read the Docs&lt;/button&gt;&lt;br&gt;&lt;br&gt;</span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;div class="doc"&gt;</span></span><br><span class="line"><span class="string">          &lt;div class="title alt"&gt;Other Documentation&lt;/div&gt;</span></span><br><span class="line"><span class="string">          &lt;button class="alt" @click="open('</span>https:<span class="comment">//electron.atom.io/docs/')"&gt;Electron&lt;/button&gt;</span></span><br><span class="line">          &lt;button <span class="class"><span class="keyword">class</span></span>=<span class="string">"alt"</span> @click=<span class="string">"open('https://vuejs.org/v2/guide/')"</span>&gt;Vue.js&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>div&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/m</span>ain&gt;</span><br><span class="line">  &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">...</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;style&gt;</span></span><br><span class="line"><span class="regexp">...</span></span><br><span class="line"><span class="regexp">&lt;/</span>style&gt;</span><br></pre></td></tr></table></figure>
+<p>这里很清晰的看到，这个页面包含了<code>left-side</code>和<code>right-side</code>两个div，分列页面左右（具体排列可以查看css中描述），左侧的布局还嵌套了一个<code>system-information</code>的组件，而右侧布局中就是一些文字+按钮。<br>而<code>system-information</code>的组件就是SystemInformation.vue文件，内容如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"title"</span>&gt;Information&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    &lt;div class="items"&gt;</span></span><br><span class="line"><span class="regexp">      &lt;div class="item"&gt;</span></span><br><span class="line"><span class="regexp">        &lt;div class="name"&gt;Path:&lt;/</span>div&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"value"</span>&gt;&#123;&#123; path &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"item"</span>&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"name"</span>&gt;Route Name:<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"value"</span>&gt;&#123;&#123; name &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"item"</span>&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"name"</span>&gt;Vue.js:<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"value"</span>&gt;&#123;&#123; vue &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"item"</span>&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"name"</span>&gt;Electron:<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"value"</span>&gt;&#123;&#123; electron &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"item"</span>&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"name"</span>&gt;Node:<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"value"</span>&gt;&#123;&#123; node &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">      &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"item"</span>&gt;</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"name"</span>&gt;Platform:<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"value"</span>&gt;&#123;&#123; platform &#125;&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>div&gt;</span><br><span class="line">&lt;<span class="regexp">/template&gt;</span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp">...</span></span><br><span class="line"><span class="regexp">&lt;/</span>script&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">...</span><br><span class="line">&lt;<span class="regexp">/style&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这都是一些系统属性。<br>至此，我们明白了整个页面是怎么被渲染出来的。他的布局如下：<br><img src="页面布局.png" alt=""><br>通过<code>vue-devtools</code>工具我们也可以看出他的渲染结构：<br><img src="vue插件.png" alt=""><br>至此，整个页面的渲染过程我们就分析完了。</p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/electron/">electron</a> <a class="tag tag--primary tag--small t-link" href="/tags/electron-vue/">electron-vue</a> <a class="tag tag--primary tag--small t-link" href="/tags/vue/">vue</a> <a class="tag tag--primary tag--small t-link" href="/tags/前端/">前端</a>
+
+            </div>
+        
+        
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 杜少峰. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/photo.jpg" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">杜少峰</h4>
+        
+            <div id="about-card-bio"><p>胆小认生，话少闷骚</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Android &amp; 前端</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                上海
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/common_bg.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-peofhqjkzcghmndknakluequy1y6owxdwpaqyju9ntl9zxnk7rdolb3rjjoj.min.js"></script>
+<!--SCRIPTS END-->
+
+
+
+    </body>
+</html>
